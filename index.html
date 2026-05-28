@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>DROC Control Panel</title>
+</head>
+<body class="bg-gray-950 text-white font-sans flex items-center justify-center min-h-screen p-4">
+
+    <div class="w-full max-w-md bg-gray-900 border border-gray-800 rounded-2xl shadow-2xl p-6 space-y-6">
+        <!-- Dashboard Header featuring your custom asset -->
+        <div class="text-center space-y-3">
+            <!-- VERBATIM REFERENCE: 1000196312-removebg-preview_2.jpg -->
+            <img src="1000196312-removebg-preview_2.jpg" alt="DROC Logo" class="w-20 h-20 mx-auto drop-shadow-[0_0_15px_rgba(99,102,241,0.5)]">
+            <div>
+                <h1 class="text-3xl font-extrabold text-indigo-500">DROC Dashboard</h1>
+                <p class="text-gray-400 text-sm mt-1">Configure your bots and manage entitlements.</p>
+            </div>
+        </div>
+
+        <hr class="border-gray-800">
+
+        <!-- Target Server Mapping Input -->
+        <div>
+            <label class="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">Target Discord Server ID</label>
+            <input id="guildId" type="text" placeholder="e.g., 110925983411000" 
+                   class="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-white placeholder-gray-500 outline-none focus:border-indigo-500 transition text-center font-mono">
+        </div>
+
+        <!-- Section: General Bot Configurations -->
+        <div class="bg-gray-850 border border-gray-800 rounded-xl p-4 space-y-3">
+            <h3 class="text-sm font-bold text-gray-300">⚙️ General Configurations</h3>
+            <div>
+                <label class="block text-xs text-gray-400 mb-1">Custom Commands Prefix</label>
+                <div class="flex space-x-2">
+                    <input id="prefixInput" type="text" placeholder="d!" class="w-20 bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-center outline-none text-white focus:border-indigo-500">
+                    <button onclick="savePrefix()" class="flex-1 bg-gray-800 hover:bg-gray-700 border border-gray-700 text-white font-medium rounded-lg transition text-sm">
+                        Update Prefix
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section: Premium Storefront Upsell Banner -->
+        <div class="border border-indigo-500/30 bg-indigo-950/20 rounded-xl p-5 space-y-3 text-center">
+            <h3 class="text-base font-bold text-indigo-400">⚡ Upgrade to DROC Premium</h3>
+            <p class="text-xs text-gray-400">Unlock custom logging filters, priority uptime loops, and un-restricted filters.</p>
+            <button onclick="triggerPremiumCheckout()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl transition shadow-lg text-sm">
+                Unlock Premium ($4.99/mo)
+            </button>
+        </div>
+    </div>
+
+    <!-- Embedded Scripts for Payment Execution and API Requests -->
+    <script src="https://cdn.sellix.io/static/js/embed.js"></script>
+    <script>
+        // 🔴 CRITICAL CONFIGURATION: Replace this string with your exact Heaven Cloud IP Address and assigned Port!
+        const HEAVEN_CLOUD_BACKEND = "http://YOUR_HEAVEN_CLOUD_IP:YOUR_PORT";
+
+        async function savePrefix() {
+            const guildId = document.getElementById("guildId").value.trim();
+            const newPrefix = document.getElementById("prefixInput").value.trim();
+
+            if (!guildId || !newPrefix) {
+                return alert("Please enter both your Server ID and a new Prefix before applying changes.");
+            }
+
+            try {
+                const response = await fetch(`${HEAVEN_CLOUD_BACKEND}/api/settings/${guildId}`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ prefix: newPrefix })
+                });
+
+                if (response.ok) {
+                    alert("✅ Success! Prefix updated in Heaven Cloud database. Your bot will update its prefix instantly.");
+                } else {
+                    alert("❌ Server rejected configuration changes. Ensure your backend console is running.");
+                }
+            } catch (err) {
+                console.error(err);
+                alert("Could not reach Heaven Cloud backend API. Check your CORS configs or allocation port numbers.");
+            }
+        }
+
+        function triggerPremiumCheckout() {
+            const guildId = document.getElementById("guildId").value.trim();
+            if (!guildId) {
+                return alert("Please fill in your Target Discord Server ID above so we know which server to upgrade!");
+            }
+
+            // Launches Sellix checkout overlay modal window
+            Sellix.initSecurePurchase({
+                productID: "YOUR_SELLIX_PRODUCT_ID", // Change to your actual Sellix product token ID
+                customFields: {
+                    "discord_guild_id": guildId
+                }
+            });
+        }
+    </script>
+</body>
+</html>
