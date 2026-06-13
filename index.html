@@ -1,205 +1,293 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <title>DROC Control Center</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DROC Security Dashboard</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Inter',sans-serif;
+}
+
+body{
+    background:#0f1117;
+    color:white;
+    display:flex;
+    min-height:100vh;
+}
+
+.sidebar{
+    width:260px;
+    background:#151923;
+    border-right:1px solid #242938;
+    padding:20px;
+}
+
+.logo{
+    font-size:28px;
+    font-weight:800;
+    color:#8b5cf6;
+    margin-bottom:30px;
+}
+
+.menu{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.menu button{
+    background:transparent;
+    border:none;
+    color:#b5bdd1;
+    text-align:left;
+    padding:14px;
+    border-radius:10px;
+    cursor:pointer;
+    transition:.3s;
+    font-size:15px;
+}
+
+.menu button:hover{
+    background:#23283a;
+    color:white;
+}
+
+.menu button.active{
+    background:#8b5cf6;
+    color:white;
+}
+
+.main{
+    flex:1;
+    padding:30px;
+}
+
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:30px;
+}
+
+.title{
+    font-size:30px;
+    font-weight:700;
+}
+
+.server{
+    background:#1d2230;
+    padding:12px 18px;
+    border-radius:12px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:20px;
+}
+
+.card{
+    background:#171c28;
+    border:1px solid #242938;
+    border-radius:18px;
+    padding:20px;
+}
+
+.card h3{
+    margin-bottom:15px;
+}
+
+.score{
+    font-size:50px;
+    font-weight:800;
+    color:#8b5cf6;
+}
+
+.bar{
+    height:12px;
+    background:#23283a;
+    border-radius:999px;
+    overflow:hidden;
+    margin-top:15px;
+}
+
+.fill{
+    width:96%;
+    height:100%;
+    background:#8b5cf6;
+}
+
+.status{
+    display:flex;
+    justify-content:space-between;
+    margin-top:12px;
+}
+
+.badge{
+    background:#22c55e22;
+    color:#4ade80;
+    padding:6px 12px;
+    border-radius:999px;
+    font-size:13px;
+}
+
+.toggle{
+    width:55px;
+    height:28px;
+    background:#8b5cf6;
+    border-radius:999px;
+    position:relative;
+    cursor:pointer;
+}
+
+.toggle::after{
+    content:'';
+    position:absolute;
+    width:22px;
+    height:22px;
+    background:white;
+    border-radius:50%;
+    right:3px;
+    top:3px;
+}
+
+.log{
+    background:#202637;
+    padding:12px;
+    border-radius:10px;
+    margin-top:10px;
+}
+
+.section{
+    margin-top:30px;
+}
+</style>
 </head>
-<body class="bg-gray-950 text-white font-sans min-h-screen">
+<body>
 
-    <nav class="bg-gray-900 border-b border-gray-800 px-6 py-4 flex justify-between items-center">
-        <div class="flex items-center space-x-3">
-            <img src="1000196312-removebg-preview.jpg" class="w-10 h-10 drop-shadow-[0_0_8px_rgba(99,102,241,0.5)]">
-            <span class="text-xl font-black text-indigo-500 tracking-wider">DROC</span>
-        </div>
-        <div id="authZone">
-            <button onclick="loginWithDiscord()" class="bg-indigo-600 hover:bg-indigo-700 px-5 py-2 rounded-xl font-bold transition text-sm">
-                Login with Discord
-            </button>
-        </div>
-    </nav>
+<div class="sidebar">
 
-    <main class="max-w-6xl mx-auto p-6 mt-6">
-        
-        <div id="loggedOutView" class="text-center py-20 space-y-4">
-            <h1 class="text-5xl font-black tracking-tight">Manage your servers with <span class="text-indigo-500">DROC</span></h1>
-            <p class="text-gray-400 max-w-md mx-auto">A fully automated tracking, administrative, and configuration layout for professional communities.</p>
-            <button onclick="loginWithDiscord()" class="bg-indigo-600 hover:bg-indigo-700 px-8 py-4 rounded-xl font-extrabold text-lg shadow-lg transition transform hover:scale-105 inline-block">
-                Get Started Now
-            </button>
-        </div>
+<div class="logo">DROC</div>
 
-        <div id="loggedInView" class="hidden space-y-6">
-            <div>
-                <h2 class="text-2xl font-black">Select a Server</h2>
-                <p class="text-gray-400 text-sm">Choose a server you manage to configure its settings.</p>
-            </div>
-            
-            <div id="serverGrid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="text-gray-500">Fetching servers from Discord...</div>
-            </div>
-        </div>
+<div class="menu">
+<button class="active">Dashboard</button>
+<button>AutoMod</button>
+<button>Anti-Nuke</button>
+<button>Anti-Raid</button>
+<button>Whitelist</button>
+<button>Logs</button>
+<button>Backups</button>
+<button>Analytics</button>
+<button>Settings</button>
+</div>
 
-        <div id="managementView" class="hidden max-w-xl mx-auto bg-gray-900 border border-gray-800 rounded-2xl p-6 space-y-6">
-            <button onclick="showServerSelection()" class="text-sm text-indigo-400 hover:underline">← Back to Servers</button>
-            <div class="flex items-center space-x-4">
-                <div id="activeServerIcon" class="w-16 h-16 bg-gray-800 rounded-full flex items-center justify-center font-bold text-xl text-indigo-400"></div>
-                <div>
-                    <h2 id="activeServerName" class="text-2xl font-black">Server Name</h2>
-                    <p class="text-xs text-gray-500 font-mono" id="activeServerId">ID: 0000</p>
-                </div>
-            </div>
-            
-            <hr class="border-gray-800">
+</div>
 
-            <div class="bg-gray-850 space-y-2">
-                <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider">Bot Custom Prefix</label>
-                <div class="flex space-x-2">
-                    <input id="prefixInput" type="text" placeholder="d!" class="w-20 bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-center text-white outline-none focus:border-indigo-500">
-                    <button onclick="saveServerSettings()" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl transition text-sm">
-                        Save Configuration
-                    </button>
-                </div>
-            </div>
+<div class="main">
 
-            <div class="border border-indigo-500/30 bg-indigo-950/20 rounded-xl p-5 text-center space-y-3">
-                <h3 class="text-base font-bold text-indigo-400">⚡ Upgrade to DROC Premium</h3>
-                <p class="text-xs text-gray-400">Unlock advanced invite tracking logic, bypass restrictions, and activate 24/7 loops.</p>
-                <button onclick="triggerPremiumCheckout()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl transition shadow-lg text-sm">
-                    Unlock Premium ($4.99/mo)
-                </button>
-            </div>
-        </div>
+<div class="header">
+<div class="title">Security Overview</div>
+<div class="server">Protected Server</div>
+</div>
 
-    </main>
+<div class="grid">
 
-    <script src="https://cdn.sellix.io/static/js/embed.js"></script>
-    <script>
-        // 🔴 CHANGE THIS to your exact Heaven Cloud Endpoint Allocation URI!
-        const HEAVEN_CLOUD_API = "http://YOUR_HEAVEN_CLOUD_IP:YOUR_PORT";
-        
-        // 🔴 CHANGE THIS to your official Discord Bot OAuth Client ID
-        const DISCORD_CLIENT_ID = "1508906063045464224";
-        
-        // Netlify auto-redirect URL back to itself
-        const REDIRECT_URI = window.location.origin; 
+<div class="card">
+<h3>Security Score</h3>
+<div class="score">96</div>
+<div class="bar">
+<div class="fill"></div>
+</div>
+</div>
 
-        let selectedGuildId = null;
+<div class="card">
+<h3>AutoMod</h3>
+<div class="status">
+<span>Enabled</span>
+<div class="toggle"></div>
+</div>
+</div>
 
-        function loginWithDiscord() {
-            // Dyno uses this exact scope string to fetch a user's server dashboard layouts
-            const oauthUrl = `https://discord.com/api/oauth2/authorize?client_id=${DISCORD_CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=token&scope=identify%20guilds`;
-            window.location.href = oauthUrl;
-        }
+<div class="card">
+<h3>Anti-Nuke</h3>
+<div class="status">
+<span>Enabled</span>
+<div class="toggle"></div>
+</div>
+</div>
 
-        // On Dashboard Boot: Check if the user just returned from a Discord Authentication redirect
-        window.onload = async function() {
-            const hash = window.location.hash;
-            if (hash.includes("access_token")) {
-                const params = new URLSearchParams(hash.replace("#", "?"));
-                const token = params.get("access_token");
-                
-                // Clear the hash bar from the browser view for cleanliness
-                window.history.replaceState({}, document.title, window.location.pathname);
-                
-                await loadUserDashboard(token);
-            }
-        }
+<div class="card">
+<h3>Anti-Raid</h3>
+<div class="status">
+<span>Enabled</span>
+<div class="toggle"></div>
+</div>
+</div>
 
-        async function loadUserDashboard(token) {
-            document.getElementById("loggedOutView").classList.add("hidden");
-            document.getElementById("loggedInView").classList.remove("hidden");
-            
-            try {
-                // Call Discord API directly from Netlify browser space to read user profiles
-                const res = await fetch("https://discord.com/api/v10/users/@me/guilds", {
-                    headers: { Authorization: `Bearer ${token}` }
-                });
-                const guilds = await res.json();
-                
-                // Filter out only servers where the user is an Administrator (Permission Bitmask flag: 0x8)
-                const adminGuilds = guilds.filter(g => (parseInt(g.permissions) & 0x8) === 0x8);
-                
-                renderServerGrid(adminGuilds);
-                
-                // Set up User profile icon in upper panel header zone
-                document.getElementById("authZone").innerHTML = `<span class="text-sm font-semibold text-gray-400">Session Secure Connected ✅</span>`;
-            } catch (err) {
-                document.getElementById("serverGrid").innerHTML = `<div class="text-red-500">Authentication Failed. Try logging in again.</div>`;
-            }
-        }
+</div>
 
-        function renderServerGrid(guilds) {
-            const grid = document.getElementById("serverGrid");
-            grid.innerHTML = "";
-            
-            guilds.forEach(guild => {
-                const hasIcon = guild.icon;
-                const iconUrl = hasIcon ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png` : "";
-                
-                const card = document.createElement("div");
-                card.className = "bg-gray-900 border border-gray-800 p-5 rounded-2xl flex items-center justify-between shadow-md hover:border-indigo-500/50 transition";
-                card.innerHTML = `
-                    <div class="flex items-center space-x-3">
-                        ${hasIcon ? `<img src="${iconUrl}" class="w-12 h-12 rounded-full">` : `<div class="w-12 h-12 bg-gray-800 rounded-full flex items-center justify-center font-bold text-indigo-400">${guild.name.charAt(0)}</div>`}
-                        <div>
-                            <h4 class="font-bold text-lg truncate max-w-[150px]">${guild.name}</h4>
-                            <p class="text-xs text-gray-500">ID: ${guild.id}</p>
-                        </div>
-                    </div>
-                    <button onclick="manageServer('${guild.id}', '${guild.name.replace(/'/g, "\\'")}', '${iconUrl}')" class="bg-gray-800 hover:bg-indigo-600 px-4 py-2 rounded-xl text-sm font-bold transition">
-                        Manage
-                    </button>
-                `;
-                grid.appendChild(card);
-            });
-        }
+<div class="section">
 
-        function manageServer(id, name, icon) {
-            selectedGuildId = id;
-            document.getElementById("loggedInView").classList.add("hidden");
-            document.getElementById("managementView").classList.remove("hidden");
-            
-            document.getElementById("activeServerName").innerText = name;
-            document.getElementById("activeServerId").innerText = `ID: ${id}`;
-            
-            const iconZone = document.getElementById("activeServerIcon");
-            if (icon) {
-                iconZone.innerHTML = `<img src="${icon}" class="w-full h-full rounded-full">`;
-            } else {
-                iconZone.innerHTML = name.charAt(0);
-            }
-        }
+<div class="card">
 
-        function showServerSelection() {
-            document.getElementById("managementView").classList.add("hidden");
-            document.getElementById("loggedInView").classList.remove("hidden");
-        }
+<h3>Recent Security Events</h3>
 
-        async function saveServerSettings() {
-            const prefix = document.getElementById("prefixInput").value.trim();
-            if(!prefix) return alert("Please specify a prefix module modification parameter.");
+<div class="log">
+🚨 Raid Attempt Blocked
+</div>
 
-            try {
-                const res = await fetch(`${HEAVEN_CLOUD_API}/api/settings/${selectedGuildId}`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ prefix: prefix })
-                });
-                if(res.ok) alert("⚙️ Settings applied successfully! DROC bot has updated its configuration.");
-                else alert("Failed saving profile config variables.");
-            } catch {
-                alert("Cannot connect to your running Heaven Cloud engine.");
-            }
-        }
+<div class="log">
+🔥 User punished for mass channel deletion
+</div>
 
-        function triggerPremiumCheckout() {
-            Sellix.initSecurePurchase({
-                productID: "YOUR_SELLIX_PRODUCT_ID",
-                customFields: { "discord_guild_id": selectedGuildId }
-            });
-        }
-    </script>
+<div class="log">
+🛡️ Scam link automatically removed
+</div>
+
+<div class="log">
+✅ Server backup created successfully
+</div>
+
+</div>
+
+</div>
+
+<div class="section">
+
+<div class="grid">
+
+<div class="card">
+<h3>Blocked Messages</h3>
+<h1>1,245</h1>
+</div>
+
+<div class="card">
+<h3>Raid Attempts</h3>
+<h1>42</h1>
+</div>
+
+<div class="card">
+<h3>Nuke Attempts</h3>
+<h1>8</h1>
+</div>
+
+<div class="card">
+<h3>Punishments</h3>
+<h1>354</h1>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
 </body>
 </html>
